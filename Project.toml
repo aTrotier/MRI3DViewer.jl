@@ -3,6 +3,10 @@ uuid = "be9bdd18-7b28-40ee-a86f-cf4b48fd41ee"
 authors = ["aTrotier <a.trotier@gmail.com> and contributors"]
 version = "0.1.0"
 
+[deps]
+GLMakie = "e9467ef8-e4e7-5192-8a1a-b1aee30e663a"
+NIfTI = "a3a9e032-41b5-5fc4-967a-a6b7a19844d3"
+
 [compat]
 julia = "1.8"
 
