@@ -56,26 +56,32 @@ function MRIView(MRIArray::Array{T,4};pixdim = (1,1,1)) where T<:Real
     # reorient image
     on(menu2.selection) do orient
         if orient == "xy"
-            im_obs[] = copy(MRIArray)
+            im_obs_tmp = copy(MRIArray)
             aspectRatio = pixdim[1]/pixdim[2]
         elseif orient == "xz"
-            im_obs[] = permutedims(MRIArray,(1,3,2,4))
+            im_obs_tmp = permutedims(MRIArray,(1,3,2,4))
             aspectRatio = pixdim[1]/pixdim[3]
         elseif orient == "yz"
-            im_obs[] = permutedims(MRIArray,(2,3,1,4))
+            im_obs_tmp = permutedims(MRIArray,(2,3,1,4))
             aspectRatio = pixdim[2]/pixdim[3]
         end
-        sz = size(im_obs[],3)
-        sg.sliders[1].range[]=1:1:sz
-        sg.sliders[1].startvalue[] = ceil(Int32,sz/2)
-        sg.sliders[1].value[] = ceil(Int32,sz/2)
+        sz = size(im_obs_tmp,3)
+        sg.sliders[1].range.val=1:1:sz
+        sg.sliders[1].startvalue.val = ceil(Int32,sz/2)
+        sg.sliders[1].value.val = ceil(Int32,sz/2)
+
+        empty!(ax)
+        #ax = Axis(fig[1,1])
+        im_obs[] = im_obs_tmp
     end
 
     onany(sg.sliders[1].value,sg.sliders[2].value,rs_h.interval,menu.selection,im_obs)  do o1,o2,o3,o4,im_obs
+
         h1 = heatmap!(ax,abs.(im_obs[:,:,o1,o2]),colormap=o4,colorrange=(o3[1],o3[2]))
         hidedecorations!(ax)
         ax.aspect=aspectRatio
     end
+
     fig
 end # function MRIView
 
